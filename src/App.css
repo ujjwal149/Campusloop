@@ -147,3 +147,156 @@ button:disabled {
     padding: 24px;
   }
 }
+
+textarea {
+  width: 100%;
+  padding: 12px;
+  font: inherit;
+  border: 1px solid #ccd8cf;
+  border-radius: 8px;
+  color: #18392b;
+  resize: vertical;
+}
+
+textarea:focus {
+  outline: 2px solid #288553;
+  outline-offset: 2px;
+}
+
+.field-help {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #66756b;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.checkbox-label input {
+  width: auto;
+  margin: 0;
+}
+
+.back-button {
+  width: auto;
+  margin: 0 0 20px;
+  padding: 8px 12px;
+  background: #e8f0eb;
+  color: #18392b;
+}
+
+.back-button:hover {
+  background: #d8e7dd;
+}
+
+.home-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.signed-in-email {
+  color: #66756b;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.resource-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.resource-filters > div {
+  flex: 1 1 220px;
+}
+
+.resource-filters .checkbox-label {
+  margin-bottom: 12px;
+}
+
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 24px;
+}
+
+.resource-card {
+  background: white;
+  border: 1px solid #dde5df;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.resource-image {
+  height: 190px;
+  display: grid;
+  place-items: center;
+  background: #e8f0eb;
+  color: #66756b;
+}
+
+.resource-image img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+}
+
+.resource-details {
+  padding: 20px;
+  overflow-wrap: anywhere;
+}
+
+.resource-details h3 {
+  margin: 16px 0 10px;
+}
+
+.resource-details p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.resource-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge {
+  padding: 5px 9px;
+  border-radius: 20px;
+  background: #f0f2f1;
+  font-size: 12px;
+}
+
+.available {
+  background: #e3f3e8;
+  color: #21643e;
+}
+
+.unavailable {
+  background: #fce9e6;
+  color: #a43b2a;
+}
+
+.deposit {
+  font-weight: bold;
+  color: #21643e;
+}
+
+.owner-label {
+  font-size: 12px;
+  color: #66756b;
+}
+
+@media (max-width: 480px) {
+  .home-page {
+    padding: 16px;
+  }
+}

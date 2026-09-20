@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
+import AddResource from './AddResource'
+import ResourceList from '../components/ResourceList'
 
 function Home({ user }) {
+  const [showAddResource, setShowAddResource] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -14,34 +17,52 @@ function Home({ user }) {
         scope: 'local',
       })
 
-      if (error) {
-        throw error
-      }
+      if (error) throw error
     } catch (error) {
-      setError(error.message || 'Unable to sign out. Please try again.')
+      setError(error.message || 'Unable to sign out.')
     } finally {
       setLoading(false)
     }
   }
 
-  return (
-    <main className="register-page">
-      <section className="register-card">
-        <h1>Welcome to CampusLoop</h1>
-        <p>You are signed in as:</p>
-        <p>{user.email}</p>
+  if (showAddResource) {
+    return (
+      <AddResource
+        user={user}
+        onBack={() => setShowAddResource(false)}
+      />
+    )
+  }
 
-        <button onClick={handleLogout} disabled={loading}>
-          {loading ? 'Signing out…' : 'Sign out'}
-        </button>
+  return (
+    <>
+      <header className="auth-nav">
+        <strong>CampusLoop</strong>
+
+        <div>
+          <button
+            onClick={() => setShowAddResource(true)}
+            disabled={loading}
+          >
+            + List a resource
+          </button>
+
+          <button onClick={handleLogout} disabled={loading}>
+            {loading ? 'Signing out…' : 'Sign out'}
+          </button>
+        </div>
+      </header>
+
+      <main className="home-page">
+        <p className="signed-in-email">Signed in as {user.email}</p>
 
         {error && (
-          <p className="error-message" role="alert">
-            {error}
-          </p>
+          <p className="error-message" role="alert">{error}</p>
         )}
-      </section>
-    </main>
+
+        <ResourceList user={user} />
+      </main>
+    </>
   )
 }
 
