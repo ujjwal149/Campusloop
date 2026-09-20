@@ -7,6 +7,7 @@ function Home({ user }) {
   const [showAddResource, setShowAddResource] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [resourceToEdit, setResourceToEdit] = useState(null)
 
   async function handleLogout() {
     setLoading(true)
@@ -25,14 +26,19 @@ function Home({ user }) {
     }
   }
 
-  if (showAddResource) {
-    return (
-      <AddResource
-        user={user}
-        onBack={() => setShowAddResource(false)}
-      />
-    )
-  }
+  if (showAddResource || resourceToEdit) {
+  return (
+    <AddResource
+      key={resourceToEdit?.id ?? 'new'}
+      user={user}
+      resourceToEdit={resourceToEdit}
+      onBack={() => {
+        setShowAddResource(false)
+        setResourceToEdit(null)
+      }}
+    />
+  )
+}
 
   return (
     <>
@@ -60,7 +66,10 @@ function Home({ user }) {
           <p className="error-message" role="alert">{error}</p>
         )}
 
-        <ResourceList user={user} />
+        <ResourceList
+          user={user}
+          onEdit={(resource) => setResourceToEdit(resource)}
+        />
       </main>
     </>
   )

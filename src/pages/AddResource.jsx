@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 
-function AddResource({ user, onBack }) {
+function AddResource({ user, onBack, resourceToEdit = null  }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
+
+  const isEditing = resourceToEdit !== null
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -40,16 +42,43 @@ function AddResource({ user, onBack }) {
         throw new Error('The image URL must start with http:// or https://.')
       }
 
-      const { error } = await supabase
-        .from('resources')
-        .insert(resource)
-
-      if (error) {
-        throw error
+      if (isEditing) {
+ 
+        const changes = {
+          name: resource.name,
+          description: resource.description,
+          category: resource.category,
+          condition: resource.condition,
+          deposit: resource.deposit,
+          pickup_location: resource.pickup_location,
+          image_url: resource.image_url,
+          is_available: resource.is_available,
+        }
+  
+        const { data, error } = await supabase
+          .from('resources')
+          .update(changes)
+          .eq('id', resourceToEdit.id)
+          .eq('owner_id', user.id)
+          .select('id')
+  
+        if (error) throw error
+  
+        if (data.length === 0) {
+          throw new Error('The item was not updated. Refresh and try again.')
+        }
+  
+        onBack()
+      } else {
+        const { error } = await supabase
+          .from('resources')
+          .insert(resource)
+      
+        if (error) throw error
+      
+        form.reset()
+        setMessage('Your resource has been listed successfully!')
       }
-
-      form.reset()
-      setMessage('Your resource has been listed successfully!')
     } catch (error) {
       setError(error.message || 'Unable to add this resource.')
     } finally {
@@ -69,95 +98,102 @@ function AddResource({ user, onBack }) {
           ← Back to home
         </button>
 
-        <h1>List a resource</h1>
+        <h1>{isEditing ? 'Edit resource' : 'List a resource'}</h1>
+        <p>
+          {isEditing
+            ? 'Update your item details below.'
+            : 'Share something useful with your campus.'}
+        </p>
         <p>Share something useful with your campus.</p>
 
         <form onSubmit={handleSubmit}>
           <fieldset disabled={loading}>
             <label htmlFor="name">Item name</label>
-            <input
-              id="name"
-              name="name"
-              placeholder="e.g. Scientific calculator"
-              maxLength={100}
-              required
-            />
-
-            <label htmlFor="description">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              placeholder="Include useful details about the item"
-              rows={3}
-              maxLength={2000}
-            />
-
-            <label htmlFor="category">Category</label>
-            <select id="category" name="category" defaultValue="" required>
-              <option value="" disabled>Select a category</option>
-              <option value="Books">Books</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Lab Equipment">Lab Equipment</option>
-              <option value="Project Components">Project Components</option>
-              <option value="Sports">Sports</option>
-              <option value="Other">Other</option>
-            </select>
-
-            <label htmlFor="condition">Condition</label>
-            <select
-              id="condition"
-              name="condition"
-              defaultValue="Good"
-              required
-            >
-              <option value="New">New</option>
-              <option value="Good">Good</option>
-              <option value="Fair">Fair</option>
-            </select>
-
-            <label htmlFor="deposit">Refundable deposit (₹)</label>
-            <input
-              id="deposit"
-              name="deposit"
-              type="number"
-              min="0"
-              max="99999999.99"
-              step="0.01"
-              defaultValue="0"
-              required
-            />
-            <p className="field-help">
-              Enter 0 for no deposit. Payments are handled outside the app.
-            </p>
-
-            <label htmlFor="pickup_location">Pickup location</label>
-            <input
-              id="pickup_location"
-              name="pickup_location"
-              placeholder="e.g. Library entrance"
-              maxLength={200}
-              required
-            />
-
-            <label htmlFor="image_url">Image URL (optional)</label>
-            <input
-              id="image_url"
-              name="image_url"
-              type="url"
-              placeholder="https://example.com/calculator.jpg"
-            />
-
-            <label className="checkbox-label">
-              <input
-                name="is_available"
-                type="checkbox"
-                defaultChecked
-              />
-              Available for borrowing
-            </label>
+                <input
+                  id="name"
+                  name="name"
+                  defaultValue={resourceToEdit?.name ?? ''}
+                  maxLength={100}
+                  required
+                />
+                        
+                <label htmlFor="description">Description</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  defaultValue={resourceToEdit?.description ?? ''}
+                  rows={3}
+                  maxLength={2000}
+                />
+                        
+                <label htmlFor="category">Category</label>
+                <select
+                  id="category"
+                  name="category"
+                  defaultValue={resourceToEdit?.category ?? ''}
+                  required
+                >
+                  <option value="" disabled>Select a category</option>
+                  <option value="Books">Books</option>
+                  <option value="Electronics">Electronics</option>
+                  <option value="Lab Equipment">Lab Equipment</option>
+                  <option value="Project Components">Project Components</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Other">Other</option>
+                </select>
+                        
+                <label htmlFor="condition">Condition</label>
+                <select
+                  id="condition"
+                  name="condition"
+                  defaultValue={resourceToEdit?.condition ?? 'Good'}
+                  required
+                >
+                  <option value="New">New</option>
+                  <option value="Good">Good</option>
+                  <option value="Fair">Fair</option>
+                </select>
+                        
+                <label htmlFor="deposit">Refundable deposit (₹)</label>
+                <input
+                  id="deposit"
+                  name="deposit"
+                  type="number"
+                  min="0"
+                  max="99999999.99"
+                  step="0.01"
+                  defaultValue={resourceToEdit?.deposit ?? 0}
+                  required
+                />
+                        
+                <label htmlFor="pickup_location">Pickup location</label>
+                <input
+                  id="pickup_location"
+                  name="pickup_location"
+                  defaultValue={resourceToEdit?.pickup_location ?? ''}
+                  maxLength={200}
+                  required
+                />
+                        
+                <label htmlFor="image_url">Image URL (optional)</label>
+                <input
+                  id="image_url"
+                  name="image_url"
+                  type="url"
+                  defaultValue={resourceToEdit?.image_url ?? ''}
+                />
+                        
+                <label className="checkbox-label">
+                  <input
+                    name="is_available"
+                    type="checkbox"
+                    defaultChecked={resourceToEdit?.is_available ?? true}
+                  />
+                  Available for borrowing
+                </label>
 
             <button type="submit">
-              {loading ? 'Saving…' : 'List resource'}
+              {loading ? 'Saving…' : isEditing ? 'Save changes' : 'List resource'}
             </button>
           </fieldset>
 

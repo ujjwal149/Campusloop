@@ -320,3 +320,19 @@ textarea:focus {
 .delete-button:hover {
   background: #f6d4ce;
 }
+
+.listing-actions {
+  flex-wrap: wrap;
+}
+
+.edit-button {
+  width: auto;
+  margin: 0;
+  padding: 8px 14px;
+  background: #e8f0eb;
+  color: #18392b;
+}
+
+.edit-button:hover {
+  background: #d8e7dd;
+}

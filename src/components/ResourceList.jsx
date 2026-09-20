@@ -10,7 +10,7 @@ const categories = [
   'Other',
 ]
 
-function ResourceList({ user }) {
+function ResourceList({ user, onEdit  }) {
   const [resources, setResources] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -216,7 +216,16 @@ function ResourceList({ user }) {
                 {resource.owner_id === user.id && (
                   <div className="listing-actions">
                     <span className="owner-label">Your listing</span>
-                                
+
+                    <button
+                      type="button"
+                      className="edit-button"
+                      onClick={() => onEdit(resource)}
+                      disabled={deletingId !== null}
+                    >
+                      Edit
+                    </button>
+
                     <button
                       type="button"
                       className="delete-button"
