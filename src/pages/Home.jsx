@@ -2,12 +2,14 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import AddResource from './AddResource'
 import ResourceList from '../components/ResourceList'
+import RequestsPanel from '../components/RequestsPanel'
 
 function Home({ user }) {
   const [showAddResource, setShowAddResource] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [resourceToEdit, setResourceToEdit] = useState(null)
+  const [resourcesVersion, setResourcesVersion] = useState(0)
 
   async function handleLogout() {
     setLoading(true)
@@ -66,7 +68,15 @@ function Home({ user }) {
           <p className="error-message" role="alert">{error}</p>
         )}
 
+        <RequestsPanel
+          user={user}
+          onRequestChanged={() => {
+            setResourcesVersion((version) => version + 1)
+          }}
+        />
+    
         <ResourceList
+          key={resourcesVersion}
           user={user}
           onEdit={(resource) => setResourceToEdit(resource)}
         />

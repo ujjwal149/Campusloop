@@ -373,3 +373,50 @@ textarea:focus {
 .cancel-button:hover {
   background: #d8e7dd;
 }
+
+.requests-panel {
+  margin: 28px 0 40px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid #dde5df;
+}
+
+.request-tabs,
+.request-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.request-tabs button,
+.request-actions button {
+  width: auto;
+  margin-top: 10px;
+}
+
+.request-tabs button[aria-pressed="false"] {
+  background: #e8f0eb;
+  color: #18392b;
+}
+
+.requests-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.request-card {
+  padding: 20px;
+  background: white;
+  border: 1px solid #dde5df;
+  border-radius: 12px;
+  overflow-wrap: anywhere;
+}
+
+.request-card h3 {
+  margin-top: 0;
+}
+
+.request-card p {
+  font-size: 14px;
+}
