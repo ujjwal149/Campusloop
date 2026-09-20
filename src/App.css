@@ -300,3 +300,23 @@ textarea:focus {
     padding: 16px;
   }
 }
+
+.listing-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.delete-button {
+  width: auto;
+  margin: 0;
+  padding: 8px 14px;
+  background: #fce9e6;
+  color: #a43b2a;
+}
+
+.delete-button:hover {
+  background: #f6d4ce;
+}

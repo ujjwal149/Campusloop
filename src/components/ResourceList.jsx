@@ -17,6 +17,8 @@ function ResourceList({ user }) {
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('')
   const [availableOnly, setAvailableOnly] = useState(false)
+  const [deletingId, setDeletingId] = useState(null)
+  const [deleteError, setDeleteError] = useState('')
 
   useEffect(() => {
     let active = true
@@ -51,6 +53,42 @@ function ResourceList({ user }) {
     }
   }, [])
 
+
+  async function handleDelete(resource) {
+  const confirmed = window.confirm(
+    `Delete "${resource.name}"? This cannot be undone.`
+  )
+
+  if (!confirmed) return
+
+  setDeletingId(resource.id)
+  setDeleteError('')
+
+  try {
+    const { data, error } = await supabase
+      .from('resources')
+      .delete()
+      .eq('id', resource.id)
+      .eq('owner_id', user.id)
+      .select('id')
+
+    if (error) throw error
+
+    if (data.length === 0) {
+      throw new Error('The item was not deleted. Refresh and try again.')
+    }
+
+    setResources((currentResources) =>
+      currentResources.filter((item) => item.id !== resource.id)
+    )
+  } catch (error) {
+    setDeleteError(error.message || 'Unable to delete this item.')
+  } finally {
+    setDeletingId(null)
+  }
+}
+
+
   const filteredResources = resources.filter((resource) => {
     const matchesSearch = resource.name
       .toLowerCase()
@@ -77,6 +115,12 @@ function ResourceList({ user }) {
     <section aria-labelledby="resources-title">
       <h2 id="resources-title">Explore your campus</h2>
       <p>Find something useful from students around you.</p>
+
+      {deleteError && (
+        <p className="error-message" role="alert">
+          {deleteError}
+        </p>
+      )}
 
       <div className="resource-filters">
         <div>
@@ -170,7 +214,18 @@ function ResourceList({ user }) {
                 </p>
 
                 {resource.owner_id === user.id && (
-                  <span className="owner-label">Your listing</span>
+                  <div className="listing-actions">
+                    <span className="owner-label">Your listing</span>
+                                
+                    <button
+                      type="button"
+                      className="delete-button"
+                      onClick={() => handleDelete(resource)}
+                      disabled={deletingId !== null}
+                    >
+                      {deletingId === resource.id ? 'Deleting…' : 'Delete'}
+                    </button>
+                  </div>
                 )}
               </div>
             </article>
