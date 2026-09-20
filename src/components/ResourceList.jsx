@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
+import BorrowRequestForm from './BorrowRequestForm'
+
 const categories = [
   'Books',
   'Electronics',
@@ -19,6 +21,7 @@ function ResourceList({ user, onEdit  }) {
   const [availableOnly, setAvailableOnly] = useState(false)
   const [deletingId, setDeletingId] = useState(null)
   const [deleteError, setDeleteError] = useState('')
+  const [requestingId, setRequestingId] = useState(null)
 
   useEffect(() => {
     let active = true
@@ -212,6 +215,30 @@ function ResourceList({ user, onEdit  }) {
                         currency: 'INR',
                       })} refundable deposit`}
                 </p>
+
+                {resource.owner_id !== user.id && (
+                  resource.is_available ? (
+                    requestingId === resource.id ? (
+                      <BorrowRequestForm
+                        key={resource.id}
+                        resource={resource}
+                        user={user}
+                        onClose={() => setRequestingId(null)}
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setRequestingId(resource.id)}
+                      >
+                        Request to borrow
+                      </button>
+                    )
+                  ) : (
+                    <p className="field-help">
+                      This item is currently unavailable.
+                    </p>
+                  )
+                )}
 
                 {resource.owner_id === user.id && (
                   <div className="listing-actions">

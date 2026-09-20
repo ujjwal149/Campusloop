@@ -336,3 +336,40 @@ textarea:focus {
 .edit-button:hover {
   background: #d8e7dd;
 }
+
+.borrow-form {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #dde5df;
+}
+
+.borrow-form h4 {
+  margin: 0 0 12px;
+}
+
+.borrow-form input {
+  display: block;
+  margin-top: 6px;
+  min-width: 0;
+}
+
+.borrow-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.borrow-actions button {
+  flex: 1;
+  width: auto;
+  margin-top: 16px;
+}
+
+.cancel-button {
+  background: #e8f0eb;
+  color: #18392b;
+}
+
+.cancel-button:hover {
+  background: #d8e7dd;
+}
