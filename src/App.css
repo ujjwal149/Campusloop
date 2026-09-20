@@ -9,11 +9,34 @@ body {
   color: #18392b;
 }
 
+.auth-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 24px;
+  background: white;
+  border-bottom: 1px solid #dde5df;
+}
+
+.auth-nav strong {
+  font-size: 22px;
+}
+
+.auth-nav > div {
+  display: flex;
+  gap: 10px;
+}
+
 .register-page {
   min-height: 100vh;
   display: grid;
   place-items: center;
   padding: 24px;
+}
+
+.auth-nav + .register-page {
+  min-height: calc(100vh - 80px);
 }
 
 .register-card {
@@ -23,15 +46,18 @@ body {
   background: white;
   border: 1px solid #dde5df;
   border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(24, 57, 43, 0.06);
 }
 
 .register-card h1 {
   margin: 0 0 10px;
+  font-size: 28px;
 }
 
 .register-card > p {
   color: #66756b;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 fieldset {
@@ -61,10 +87,12 @@ input,
 select {
   border: 1px solid #ccd8cf;
   background: white;
+  color: #18392b;
 }
 
 input:focus,
-select:focus {
+select:focus,
+button:focus-visible {
   outline: 2px solid #288553;
   outline-offset: 2px;
 }
@@ -86,6 +114,17 @@ button:disabled {
   cursor: wait;
 }
 
+.auth-nav button {
+  width: auto;
+  margin: 0;
+  padding: 10px 14px;
+}
+
+.auth-nav button[aria-pressed="false"] {
+  background: #e8f0eb;
+  color: #18392b;
+}
+
 .error-message {
   color: #b42318;
 }
@@ -94,7 +133,16 @@ button:disabled {
   color: #21643e;
 }
 
+.page-message {
+  padding: 40px;
+  text-align: center;
+}
+
 @media (max-width: 480px) {
+  .auth-nav {
+    flex-direction: column;
+  }
+
   .register-card {
     padding: 24px;
   }
